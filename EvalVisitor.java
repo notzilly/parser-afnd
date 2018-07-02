@@ -31,6 +31,9 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 		value = visit(ctx.inicial()); // Inicial
 		System.out.println("Inicial: " + value);
 
+		value = visit(ctx.finais()); // Final
+		System.out.println("Final: " + value);
+
 		System.out.println(estados);
 		System.out.println(simbolos);
 		System.out.println("É AFND? " + maisDeUmEstado);
@@ -112,5 +115,15 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 		return retorno;
 	}
 	
-	@Override public Boolean visitPrintFin(AFNDParser.PrintFinContext ctx) { return visitChildren(ctx); }
+	@Override
+	public Boolean visitPrintFin(AFNDParser.PrintFinContext ctx) {
+		Boolean retorno = true;
+		for(int i = 0; i < ctx.ESTADO().size(); i++){
+			if(!estados.contains(ctx.ESTADO(i).getText())){
+				retorno = false;
+				erros.add("Estado final não declarado: " + ctx.ESTADO(i).getText());
+			}
+		}
+		return retorno;
+	}
 }
