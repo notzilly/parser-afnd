@@ -74,7 +74,7 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 	public Boolean visitPrintTra(AFNDParser.PrintTraContext ctx) {
 		Boolean retorno = true;
 		for(int i = 0; i < ctx.regra().size(); i++){
-			visit(ctx.regra(i));
+			if(!visit(ctx.regra(i))) retorno = false;
 		}
 		return retorno;
 	}
