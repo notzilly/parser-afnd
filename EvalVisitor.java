@@ -11,6 +11,9 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 	// ArrayList dos erros coletados 
 	ArrayList<String> erros = new ArrayList<String>();
 
+	// True se pelo menos uma regra tiver mais de um possível estado
+	Boolean maisDeUmEstado = false;
+
 	@Override
 	public Boolean visitPrintPro(AFNDParser.PrintProContext ctx) {
 
@@ -28,6 +31,7 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 
 		System.out.println(estados);
 		System.out.println(simbolos);
+		System.out.println("É AFND? " + maisDeUmEstado);
 
 		// Printa erros
 		for(int i = 0; i < erros.size(); i++){
@@ -77,7 +81,23 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 	
 	@Override
 	public Boolean visitPrintReg(AFNDParser.PrintRegContext ctx) {
-		return visitChildren(ctx);
+		Boolean retorno = true;
+
+		if(ctx.ESTADO().size() > 2){
+			maisDeUmEstado = true;
+		}
+
+		for(int i = 0; i < ctx.ESTADO().size(); i++){
+			if(!estados.contains(ctx.ESTADO(i).getText())){
+				retorno = false;
+				erros.add("Estado não declarado: " + ctx.ESTADO(i).getText());
+			}
+		}
+		if(!simbolos.contains(ctx.CHAR().getText())){
+			retorno = false;
+			erros.add("Símbolo não declarado: " + ctx.CHAR().getText());
+		}
+		return retorno;
 	}
 	
 	@Override public Boolean visitPrintIni(AFNDParser.PrintIniContext ctx) { return visitChildren(ctx); }
