@@ -28,6 +28,8 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 		value = visit(ctx.transicao()); // Transição
 		System.out.println("Transição: " + value);
 
+		value = visit(ctx.inicial()); // Inicial
+		System.out.println("Inicial: " + value);
 
 		System.out.println(estados);
 		System.out.println(simbolos);
@@ -90,7 +92,7 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 		for(int i = 0; i < ctx.ESTADO().size(); i++){
 			if(!estados.contains(ctx.ESTADO(i).getText())){
 				retorno = false;
-				erros.add("Estado não declarado: " + ctx.ESTADO(i).getText());
+				erros.add("Estado em regra não declarado: " + ctx.ESTADO(i).getText());
 			}
 		}
 		if(!simbolos.contains(ctx.CHAR().getText())){
@@ -100,7 +102,15 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 		return retorno;
 	}
 	
-	@Override public Boolean visitPrintIni(AFNDParser.PrintIniContext ctx) { return visitChildren(ctx); }
+	@Override
+	public Boolean visitPrintIni(AFNDParser.PrintIniContext ctx) {
+		Boolean retorno = true;
+		if(!estados.contains(ctx.ESTADO().getText())){
+			retorno = false;
+			erros.add("Estado inicial não declarado: " + ctx.ESTADO().getText());
+		}
+		return retorno;
+	}
 	
 	@Override public Boolean visitPrintFin(AFNDParser.PrintFinContext ctx) { return visitChildren(ctx); }
 }
