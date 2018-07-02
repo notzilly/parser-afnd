@@ -118,10 +118,18 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 	@Override
 	public Boolean visitPrintFin(AFNDParser.PrintFinContext ctx) {
 		Boolean retorno = true;
+		ArrayList<String> estadosFinais = new ArrayList<String>();
 		for(int i = 0; i < ctx.ESTADO().size(); i++){
-			if(!estados.contains(ctx.ESTADO(i).getText())){
+			if(!estados.contains(ctx.ESTADO(i).getText())){ // Se estado não existe no array de possíveis estados
 				retorno = false;
 				erros.add("Estado final não declarado: " + ctx.ESTADO(i).getText());
+			} else {
+				if(estadosFinais.contains(ctx.ESTADO(i).getText())) { // Se estado já foi declarado no array de estados finais
+					retorno = false;
+					erros.add("Estado final duplicado: " + ctx.ESTADO(i).getText());
+				} else { // Se der tudo certo, adiciona no array de estados finais
+					estadosFinais.add(ctx.ESTADO(i).getText());
+				}
 			}
 		}
 		return retorno;
