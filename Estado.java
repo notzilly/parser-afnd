@@ -1,40 +1,45 @@
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
-import java.util.Scanner;
 import java.util.LinkedHashMap;
-import java.util.Set;
-import java.util.Iterator;
-import java.util.LinkedList;
-
 
 public class Estado{
-	public String nome;
-	public Map<String, List<String>> map_transicoes; //criar HASH MAP DE TRANSIÇOES
-	boolean status;
+
+	private String nome;
+	private Map<String, List<String>> mapTransicoes;
+	Boolean status;
+
 	public Estado(String nome){
 		this.nome = nome;
-		this.map_transicoes = new LinkedHashMap<String, List<String>>();
-		
+		this.mapTransicoes = new LinkedHashMap<String, List<String>>();
 	}
 
-	//CRIAR HASHMAP DE TRANSIÇÕES
-	public void add_transicoes(String transicao,List<String> destino>{
-		//ver como adicionar
+	public void addTransicao(String transicao, List<String> destino){
+		this.mapTransicoes.put(transicao, destino);
 	}
 
-	public void set_status(status){
+	@Override
+	public String toString() {
+		String retorno = "";
+		for(String chave : mapTransicoes.keySet()){
+			retorno = retorno.concat("(" + nome + ", " + chave + "): " + mapTransicoes.get(chave).toString());
+		}
+		return retorno;
+	}
+
+	public void setNome(String nome){
+		this.nome = nome;
+	}
+
+	public String getNome(){
+		return this.nome;
+	}
+
+	public void setStatus(Boolean status){
 		this.status = status;
 	}
 
-	public boolean get_status(){
+	public Boolean getStatus(){
 		return this.status;
 	}
-
-	
-
-
-
 
 }

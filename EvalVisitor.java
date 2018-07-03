@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 
@@ -6,6 +7,8 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 	private ArrayList<String> estados = new ArrayList<String>();
 	// ArrayList dos simbolos
 	private ArrayList<String> simbolos = new ArrayList<String>();
+	// ArrayList de objetos Estado
+	private ArrayList<Estado> objEstados = new ArrayList<Estado>();
 	// String do estado inicial
 	private String estadoInicial;
 	// ArrayList dos estados finais
@@ -13,27 +16,25 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 	// ArrayList dos erros coletados 
 	private ArrayList<String> erros = new ArrayList<String>();
 	// True se pelo menos uma regra tiver mais de um possível estado
-	Boolean maisDeUmEstado = false;
+	private Boolean maisDeUmEstado = false;
 
 	@Override
 	public Boolean visitPrintPro(AFNDParser.PrintProContext ctx) {
 
-		Boolean value;
+		Boolean bEstados = visit(ctx.estados()); // Estados
+        System.out.println("Estados: " + bEstados);
 
-		value = visit(ctx.estados()); // Estados
-        System.out.println("Estados: " + value);
+		Boolean bSimbolos = visit(ctx.simbolos()); // Símbolos
+        System.out.println("Símbolos: " + bSimbolos);
 
-		value = visit(ctx.simbolos()); // Símbolos
-        System.out.println("Símbolos: " + value);
+		Boolean bTransicao = visit(ctx.transicao()); // Transição
+		System.out.println("Transição: " + bTransicao);
 
-		value = visit(ctx.transicao()); // Transição
-		System.out.println("Transição: " + value);
+		Boolean bInicial = visit(ctx.inicial()); // Inicial
+		System.out.println("Inicial: " + bInicial);
 
-		value = visit(ctx.inicial()); // Inicial
-		System.out.println("Inicial: " + value);
-
-		value = visit(ctx.finais()); // Final
-		System.out.println("Final: " + value);
+		Boolean bFinal = visit(ctx.finais()); // Final
+		System.out.println("Final: " + bFinal);
 
 		System.out.println(estados);
 		System.out.println(simbolos);
@@ -41,24 +42,29 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 		System.out.println(estadosFinais);
 		System.out.println("Alguma regra tem mais de 1 possível estado? " + maisDeUmEstado);
 
+		for(Estado estado : objEstados){
+			System.out.println(estado);
+		}
+
 		// Printa erros
 		for(int i = 0; i < erros.size(); i++){
 			System.out.println(erros.get(i));
 		}
 
-
-		return visitChildren(ctx);
+		return bEstados && bSimbolos && bTransicao && bInicial && bFinal && maisDeUmEstado;
 	}
 	
 	@Override
 	public Boolean visitPrintEst(AFNDParser.PrintEstContext ctx) {
 		Boolean retorno = true;
 		for(int i = 0; i < ctx.ESTADO().size(); i++){
-			if(!estados.contains(ctx.ESTADO(i).getText())){
-				estados.add(ctx.ESTADO(i).getText());
+			String strEstado = ctx.ESTADO(i).getText();
+			if(!estados.contains(strEstado)){
+				estados.add(strEstado);
+				objEstados.add(new Estado(strEstado)); // Cria objeto Estado e adiciona no array
 			} else {
 				retorno = false;
-				erros.add("Estado duplicado: " + ctx.ESTADO(i).getText());
+				erros.add("Estado duplicado: " + strEstado);
 			}
 		}
 		return retorno;
@@ -68,11 +74,12 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 	public Boolean visitPrintSim(AFNDParser.PrintSimContext ctx) {
 		Boolean retorno = true;
 		for(int i = 0; i < ctx.CHAR().size(); i++){
-			if(!simbolos.contains(ctx.CHAR(i).getText())){
-				simbolos.add(ctx.CHAR(i).getText());
+			String strChar = ctx.CHAR(i).getText();
+			if(!simbolos.contains(strChar)){
+				simbolos.add(strChar);
 			} else {
 				retorno = false;
-				erros.add("Símbolo duplicado: " + ctx.CHAR(i).getText());
+				erros.add("Símbolo duplicado: " + strChar);
 			}
 		}
 		return retorno;
@@ -90,20 +97,21 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 	@Override
 	public Boolean visitPrintReg(AFNDParser.PrintRegContext ctx) {
 		Boolean retorno = true;
-		ArrayList<String> estadosRegra = new ArrayList<String>();
+		List<String> estadosRegra = new ArrayList<String>();
 
 		if(ctx.ESTADO().size() > 2) maisDeUmEstado = true;
 
 		for(int i = 0; i < ctx.ESTADO().size(); i++){
-			if(!estados.contains(ctx.ESTADO(i).getText())){ // Se estado não existe no array de possíveis estados
+			String strEstado = ctx.ESTADO(i).getText();
+			if(!estados.contains(strEstado)){ // Se estado não existe no array de possíveis estados
 				retorno = false;
-				erros.add("Estado em regra não declarado: " + ctx.ESTADO(i).getText());
+				erros.add("Estado em regra não declarado: " + strEstado);
 			} else if(i > 0) { // Ignora o primeiro estado
-				if(estadosRegra.contains(ctx.ESTADO(i).getText())) { // Se estado já foi declarado no array de estados da regra
+				if(estadosRegra.contains(strEstado)) { // Se estado já foi declarado no array de estados da regra
 					retorno = false;
-					erros.add("Estado em regra duplicado: " + ctx.ESTADO(i).getText());
+					erros.add("Estado em regra duplicado: " + strEstado);
 				} else { // Se der tudo certo, adiciona no array de estados da regra
-					estadosRegra.add(ctx.ESTADO(i).getText());
+					estadosRegra.add(strEstado);
 				}
 			}
 		}
@@ -112,6 +120,14 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 			retorno = false;
 			erros.add("Símbolo não declarado: " + ctx.CHAR().getText());
 		}
+
+		// Adiciona regra ao objeto Estado
+		for(Estado estado : objEstados){
+			if(estado.getNome().equals(ctx.ESTADO(0).getText())){
+				estado.addTransicao(ctx.CHAR().getText(), estadosRegra);
+			}
+		}
+
 		return retorno;
 	}
 	
@@ -131,15 +147,16 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 	public Boolean visitPrintFin(AFNDParser.PrintFinContext ctx) {
 		Boolean retorno = true;
 		for(int i = 0; i < ctx.ESTADO().size(); i++){
-			if(!estados.contains(ctx.ESTADO(i).getText())){ // Se estado não existe no array de possíveis estados
+			String strEstado = ctx.ESTADO(i).getText();
+			if(!estados.contains(strEstado)){ // Se estado não existe no array de possíveis estados
 				retorno = false;
-				erros.add("Estado final não declarado: " + ctx.ESTADO(i).getText());
+				erros.add("Estado final não declarado: " + strEstado);
 			} else {
-				if(estadosFinais.contains(ctx.ESTADO(i).getText())) { // Se estado já foi declarado no array de estados finais
+				if(estadosFinais.contains(strEstado)) { // Se estado já foi declarado no array de estados finais
 					retorno = false;
-					erros.add("Estado final duplicado: " + ctx.ESTADO(i).getText());
+					erros.add("Estado final duplicado: " + strEstado);
 				} else { // Se der tudo certo, adiciona no array de estados finais
-					estadosFinais.add(ctx.ESTADO(i).getText());
+					estadosFinais.add(strEstado);
 				}
 			}
 		}
