@@ -22,10 +22,6 @@ public class Automato{
 		this.lobjeto_estados = lobjeto_estados;
 	}
 
-	public void add_estado(String estado){
-		lobjeto_estados.add(new Estado(estado));
-	}
-
 	public ArrayList<Estado> get_objeto_estados(){
 		return lobjeto_estados;
 	}
@@ -34,16 +30,16 @@ public class Automato{
 		return estado_inicial;
 	}
 
-	public Estado get_estado_nome(String atual){
+	public Estado getEstado(String nome){
 		for(Estado estado : this.lobjeto_estados){
-			if(estado.getNome().equals(atual))
+			if(estado.getNome().equals(nome))
 				return estado;
 		}
-		return (new Estado ("erro")); // nunca entra aki rever
+		return null; // nunca entra aki rever
 	}
 
 	public Boolean Percorre(String input, Estado estado){
-		if(input.equals("$") && estado.getEstadoFinal() == true){
+		if(input.equals("$") && estado.getEstadoFinal()){
 			return true;
 		}
 
@@ -54,7 +50,7 @@ public class Automato{
 		//verificar se da certo a passagem de input
 		if(l != null){
 			for(int i = 0 ; i < l.size(); i++){
-				Boolean variavel = Percorre( input.substring(1), get_estado_nome(l.get(i)));
+				Boolean variavel = Percorre(input.substring(1), getEstado(l.get(i)));
 				if(variavel == true) return true; 
 			}
 

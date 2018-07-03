@@ -27,6 +27,13 @@ public class AFND {
                 eval.getEstadosFinais(),
                 eval.getObjEstados()
             );
+            String inicial = automato.get_estado_inicial();
+            if(automato.Percorre("abba$", automato.getEstado(inicial))){
+                System.out.println("Palavra válida");
+            } else {
+                System.out.println("Palavra não válida");
+            }
+
         } else {
             System.out.println("Autômato não é AFND");
         }
