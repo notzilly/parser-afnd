@@ -11,26 +11,23 @@ import java.util.LinkedList;
 
 
 public class Automato{
-	public ArrayList<String> lista_estados;
 	public String estado_inicial;
 	public ArrayList<String> lista_alfabeto;
 	public ArrayList<String> estados_finais;
 	public ArrayList<Estado> lobjeto_estados;
 
 
-	public Automato(ArrayList<String> lista_estados,String estado_inicial,ArrayList<String> lista_alfabeto,ArrayList<String> estados_finais,HashMap<String, String>hmap_transicoes){
-		this.lista_estados = lista_estados;
+	public Automato(String estado_inicial,ArrayList<String> lista_alfabeto,ArrayList<String> estados_finais){
 		this.estado_inicial = estado_inicial;
 		this.lista_alfabeto = lista_alfabeto;
 		this.estados_finais = estados_finais;
-		this.hmap_transicoes = hmap_transicoes;
 	}
 
 	public void add_estado(String estado){
 		lobjeto_estados.add(Estado(estado));
 	}
 
-	public ArrayList<Estados> get_objeto_estados(){
+	public ArrayList<Estado> get_objeto_estados(){
 		return  lobjeto_estados;
 	}
 
@@ -50,7 +47,7 @@ public class Automato{
 		if(imput.equals("$") && estado.get_est_final() == true)
 			return true;
 
-		List l = new List<String>();
+		List<String> l = new List<String>();
 		//passar somente a primeira letra e pegar todos as listas
 		l = estado.get_lista(imput[0]);
 
