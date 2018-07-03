@@ -19,6 +19,10 @@ public class AFND {
         System.out.println(tree.toStringTree(parser)); // printa árvore
 
         EvalVisitor eval = new EvalVisitor();
-        eval.visit(tree);
+        if(eval.visit(tree)) {
+            System.out.println("Autômato é AFND");
+        } else {
+            System.out.println("Autômato não é AFND");
+        }
     }
 }
