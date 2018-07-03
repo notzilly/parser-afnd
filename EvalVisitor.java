@@ -3,14 +3,15 @@ import java.util.ArrayList;
 public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 
 	// ArrayList dos estados
-	ArrayList<String> estados = new ArrayList<String>();
-
+	private ArrayList<String> estados = new ArrayList<String>();
 	// ArrayList dos simbolos
-	ArrayList<String> simbolos = new ArrayList<String>();
-
+	private ArrayList<String> simbolos = new ArrayList<String>();
+	// String do estado inicial
+	private String estadoInicial;
+	// ArrayList dos estados finais
+	private ArrayList<String> estadosFinais = new ArrayList<String>();
 	// ArrayList dos erros coletados 
-	ArrayList<String> erros = new ArrayList<String>();
-
+	private ArrayList<String> erros = new ArrayList<String>();
 	// True se pelo menos uma regra tiver mais de um possível estado
 	Boolean maisDeUmEstado = false;
 
@@ -36,6 +37,8 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 
 		System.out.println(estados);
 		System.out.println(simbolos);
+		System.out.println(estadoInicial);
+		System.out.println(estadosFinais);
 		System.out.println("Alguma regra tem mais de 1 possível estado? " + maisDeUmEstado);
 
 		// Printa erros
@@ -118,6 +121,8 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 		if(!estados.contains(ctx.ESTADO().getText())){
 			retorno = false;
 			erros.add("Estado inicial não declarado: " + ctx.ESTADO().getText());
+		} else {
+			estadoInicial = ctx.ESTADO().getText();
 		}
 		return retorno;
 	}
@@ -125,7 +130,6 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 	@Override
 	public Boolean visitPrintFin(AFNDParser.PrintFinContext ctx) {
 		Boolean retorno = true;
-		ArrayList<String> estadosFinais = new ArrayList<String>();
 		for(int i = 0; i < ctx.ESTADO().size(); i++){
 			if(!estados.contains(ctx.ESTADO(i).getText())){ // Se estado não existe no array de possíveis estados
 				retorno = false;
