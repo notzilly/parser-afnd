@@ -21,6 +21,12 @@ public class AFND {
         EvalVisitor eval = new EvalVisitor();
         if(eval.visit(tree)) {
             System.out.println("Autômato é AFND");
+            Automato automato = new Automato(
+                eval.getEstadoInicial(),
+                eval.getSimbolos(),
+                eval.getEstadosFinais(),
+                eval.getObjEstados()
+            );
         } else {
             System.out.println("Autômato não é AFND");
         }

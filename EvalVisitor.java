@@ -18,6 +18,26 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 	// True se pelo menos uma regra tiver mais de um possível estado
 	private Boolean maisDeUmEstado = false;
 
+	public ArrayList<Estado> getObjEstados(){
+		return objEstados;
+	}
+
+	public ArrayList<String> getSimbolos(){
+		return simbolos;
+	}
+
+	public String getEstadoInicial(){
+		return estadoInicial;
+	}
+
+	public ArrayList<String> getEstadosFinais(){
+		return estadosFinais;
+	}
+
+	public ArrayList<String> getErros(){
+		return erros;
+	}
+
 	@Override
 	public Boolean visitPrintPro(AFNDParser.PrintProContext ctx) {
 
