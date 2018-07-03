@@ -43,6 +43,7 @@ public class Estado{
 	@Override
 	public String toString() {
 		String retorno = "";
+		if(estadoFinal) retorno = retorno.concat("Final: ");
 		for(String chave : mapTransicoes.keySet()){
 			retorno = retorno.concat("(" + nome + ", " + chave + "): " + mapTransicoes.get(chave).toString());
 		}

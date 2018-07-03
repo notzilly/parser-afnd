@@ -177,6 +177,12 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 					erros.add("Estado final duplicado: " + strEstado);
 				} else { // Se der tudo certo, adiciona no array de estados finais
 					estadosFinais.add(strEstado);
+					// Seta estado final
+					for(Estado estado : objEstados){
+						if(estado.getNome().equals(ctx.ESTADO(i).getText())){
+							estado.setEstadoFinal(true);
+						}
+					}
 				}
 			}
 		}
