@@ -6,27 +6,33 @@ public class Estado{
 
 	private String nome;
 	private Map<String, List<String>> mapTransicoes;
-	private boolean est_final = false;
+	private Boolean estadoFinal = false;
 
 	public Estado(String nome){
 		this.nome = nome;
 		this.mapTransicoes = new LinkedHashMap<String, List<String>>();
 	}
 
-	public void set_est_final(boolean value){
-		this.est_final = value;
-
+	public void setNome(String nome){
+		this.nome = nome;
 	}
 
-	public void get_est_final(){
-		return est_final;
+	public String getNome(){
+		return this.nome;
+	}
+
+	public void setEstadoFinal(Boolean value){
+		this.estadoFinal = value;
+	}
+
+	public Boolean getEstadoFinal(){
+		return estadoFinal;
 	}
 
 
 	//metodo para pegar a lista do hash map
-	public void get_lista(){
-
-
+	public List<String> getLista(String caract){
+		return mapTransicoes.get(caract);
 	}
 
 	//certo??
@@ -42,17 +48,5 @@ public class Estado{
 		}
 		return retorno;
 	}
-
-	public void setNome(String nome){
-		this.nome = nome;
-	}
-
-	public String getNome(){
-		return this.nome;
-	}
-
-
-
-	
 
 }
