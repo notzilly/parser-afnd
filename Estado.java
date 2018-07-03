@@ -19,11 +19,6 @@ public class Estado{
 		
 	}
 
-	public void add_estado(Estado estado){
-		lobjeto_estados.add(estado);
-	}
-
-
 	//CRIAR HASHMAP DE TRANSIÇÕES
 	public void add_transicoes(String transicao,List<String> destino>{
 		//ver como adicionar
@@ -37,7 +32,7 @@ public class Estado{
 		return this.status;
 	}
 
-	public 
+	
 
 
 
