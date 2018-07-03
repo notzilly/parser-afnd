@@ -39,6 +39,7 @@ public class Automato{
 			if(estado.getNome().equals(atual))
 				return estado;
 		}
+		return (new Estado ("erro")); // nunca entra aki rever
 	}
 
 	public Boolean Percorre(String input, Estado estado){
@@ -53,7 +54,7 @@ public class Automato{
 		//verificar se da certo a passagem de input
 		if(l != null){
 			for(int i = 0 ; i < l.size(); i++){
-				Boolean variavel = Percorre( input.substring(1), get_estado_nome(l[i]));
+				Boolean variavel = Percorre( input.substring(1), get_estado_nome(l.get(i)));
 				if(variavel == true) return true; 
 			}
 
