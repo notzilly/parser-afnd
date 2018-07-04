@@ -22,7 +22,7 @@ public class AFND {
 
         // Se autômato é validado
         if(eval.visit(tree)) {
-            System.out.println("Autômato é AFND");
+            System.out.println("Autômato é um AFND válido");
 
             // Instância do autômato
             Automato automato = new Automato(
@@ -49,7 +49,7 @@ public class AFND {
             }
 
         } else {
-            System.out.println("Autômato não é AFND");
+            System.out.println("Autômato não é um AFND válido");
             // Printa erros
             for(String erro : eval.getErros()){
                 System.out.println(erro);
