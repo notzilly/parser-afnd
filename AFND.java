@@ -4,6 +4,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+import java.util.Scanner;
+
 public class AFND {
     public static void main(String[] args) throws Exception {
         String inputFile = null;
@@ -16,8 +18,6 @@ public class AFND {
         AFNDParser parser = new AFNDParser(tokens);
 
         ParseTree tree = parser.prog(); // parse
-        //System.out.println(tree.toStringTree(parser)); // printa árvore
-
         EvalVisitor eval = new EvalVisitor();
 
         // Se autômato é validado
@@ -31,12 +31,21 @@ public class AFND {
                 eval.getObjEstados()
             );
 
-            if(automato.run("abbbababba")){
-                automato.printCaminho();
-                System.out.println("Palavra válida");
-            } else {
-                automato.printCaminho();
-                System.out.println("Palavra não válida");
+            // Loop de entrada
+            while(true){
+                System.out.println("Digite uma palavra:");
+                Scanner entrada = new Scanner(System.in);
+                
+                if(automato.run(entrada.next())){
+                    automato.printCaminho();
+                    System.out.println("Palavra válida");
+                } else {
+                    automato.printCaminho();
+                    System.out.println("Palavra não válida");
+                }
+
+                automato.resetaCaminho();
+
             }
 
         } else {

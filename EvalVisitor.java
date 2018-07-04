@@ -38,33 +38,14 @@ public class EvalVisitor extends AFNDBaseVisitor<Boolean> {
 	public Boolean visitPrintPro(AFNDParser.PrintProContext ctx) {
 
 		Boolean bEstados = visit(ctx.estados()); // Estados
-        // System.out.println("Estados: " + bEstados);
-
 		Boolean bSimbolos = visit(ctx.simbolos()); // Símbolos
-        // System.out.println("Símbolos: " + bSimbolos);
-
 		Boolean bTransicao = visit(ctx.transicao()); // Transição
-		// System.out.println("Transição: " + bTransicao);
-
 		Boolean bInicial = visit(ctx.inicial()); // Inicial
-		// System.out.println("Inicial: " + bInicial);
-
 		Boolean bFinal = visit(ctx.finais()); // Final
-		// System.out.println("Final: " + bFinal);
 
 		if(!maisDeUmEstado){
 			erros.add("Alguma regra precisa possuir pelo menos dois possíveis estados");
 		}
-
-		// System.out.println(estados);
-		// System.out.println(simbolos);
-		// System.out.println(estadoInicial);
-		// System.out.println(estadosFinais);
-		// System.out.println("Alguma regra tem mais de 1 possível estado? " + maisDeUmEstado);
-
-		// for(Estado estado : objEstados){
-		// 	System.out.println(estado);
-		// }
 
 		return bEstados && bSimbolos && bTransicao && bInicial && bFinal && maisDeUmEstado;
 	}

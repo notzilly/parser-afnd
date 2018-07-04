@@ -34,13 +34,15 @@ public class Automato{
 		return null;
 	}
 
+	public void resetaCaminho(){
+		this.caminho = new ArrayList<String>();
+	}
+
 	public Boolean run(String input){
 		return percorre(input + "$", getEstado(estadoInicial));
 	}
 
 	private Boolean percorre(String input, Estado estado){
-		// System.out.println(estado.getNome() + " " + input);
-
 		// Se caractere for o final da string ($) e o estado for final
 		if(input.equals("$") && estado.getEstadoFinal()){
 			caminho.add(estado.getNome() + " é final e recebeu $ | Fim");
