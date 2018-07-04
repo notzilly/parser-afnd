@@ -16,19 +16,20 @@ public class AFND {
         AFNDParser parser = new AFNDParser(tokens);
 
         ParseTree tree = parser.prog(); // parse
-        System.out.println(tree.toStringTree(parser)); // printa árvore
+        //System.out.println(tree.toStringTree(parser)); // printa árvore
 
         EvalVisitor eval = new EvalVisitor();
+
+        // Se autômato é validado
         if(eval.visit(tree)) {
             System.out.println("Autômato é AFND");
             Automato automato = new Automato(
                 eval.getEstadoInicial(),
-                eval.getSimbolos(),
                 eval.getEstadosFinais(),
                 eval.getObjEstados()
             );
-            String inicial = automato.get_estado_inicial();
-            if(automato.Percorre("abba$", automato.getEstado(inicial))){
+
+            if(automato.run("abbbba")){
                 System.out.println("Palavra válida");
             } else {
                 System.out.println("Palavra não válida");
@@ -36,6 +37,10 @@ public class AFND {
 
         } else {
             System.out.println("Autômato não é AFND");
+            // Printa erros
+            for(String erro : eval.getErros()){
+                System.out.println(erro);
+            }
         }
     }
 }
