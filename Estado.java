@@ -29,13 +29,10 @@ public class Estado{
 		return estadoFinal;
 	}
 
-
-	//metodo para pegar a lista do hash map
 	public List<String> getLista(String caract){
 		return mapTransicoes.get(caract);
 	}
 
-	//certo??
 	public void addTransicao(String transicao, List<String> destino){
 		this.mapTransicoes.put(transicao, destino);
 	}
