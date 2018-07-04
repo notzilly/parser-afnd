@@ -1,6 +1,6 @@
 ## Interpretador para AFNDs
 
-##Francisco Tassinari Fajardo e Luis Henrique Medeiros
+Francisco Tassinari Fajardo e Luis Henrique Medeiros
 
 #### Instalação e utilização
 
