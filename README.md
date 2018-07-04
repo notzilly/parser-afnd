@@ -1,5 +1,7 @@
 ## Interpretador para AFNDs
 
+##Francisco Tassinari Fajardo e Luis Henrique Medeiros
+
 #### Instalação e utilização
 
 OBS.: Necessário ter antlr4 e java instalado e configurado para se usar os comandos.
@@ -35,3 +37,13 @@ Verificação de erros através da Classe EvalVisitor.java:
 * Estados finais: 
 	* Verificamos se o estado existe nos estados declarados;
 	* Verificamos repetição;
+
+
+### Implementação do AFND
+
+O automato foi implementado na classe Automato.java, 
+e usa a função chamada percorre para avaliar recursivamente todas as possibilidades de transições de estados, 
+utiliza-se um '$' para saber o fim da entrada e a classe Estado.java que contém os dados de cada estado.
+
+
+
