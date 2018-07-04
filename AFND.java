@@ -23,15 +23,19 @@ public class AFND {
         // Se autômato é validado
         if(eval.visit(tree)) {
             System.out.println("Autômato é AFND");
+
+            // Instância do autômato
             Automato automato = new Automato(
                 eval.getEstadoInicial(),
                 eval.getEstadosFinais(),
                 eval.getObjEstados()
             );
 
-            if(automato.run("abbbba")){
+            if(automato.run("abbbababba")){
+                automato.printCaminho();
                 System.out.println("Palavra válida");
             } else {
+                automato.printCaminho();
                 System.out.println("Palavra não válida");
             }
 
